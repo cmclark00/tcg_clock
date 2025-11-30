@@ -8,8 +8,8 @@ import { Settings as SettingsIcon } from 'lucide-react';
 const DEFAULT_SETTINGS: AppSettings = {
   defaultDurationMinutes: 50,
   numberOfTimers: 4,
-  fontTheme: 'Modern',
-  timerTextColor: '#ffffff',
+  fontTheme: 'Sci-Fi',
+  timerTextColor: '#00f3ff',
   timerFontSize: 'Large',
   timerTextPosition: 'Center',
   timerBackgroundOpacity: 50,
@@ -65,9 +65,11 @@ function App() {
 
   // Font Theme Classes
   const fontClasses = {
-    'Modern': 'font-[Inter]',
+    'Sci-Fi': 'font-orbitron',
+    'Industrial': 'font-rajdhani',
     'Retro': 'font-[\'JetBrains_Mono\']',
     'Gothic': 'font-[Cinzel]',
+    'Modern': 'font-[Inter]', // Keep for compatibility if needed, or map to Rajdhani
   };
 
   // Timer Tick Logic
@@ -102,9 +104,10 @@ function App() {
     osc.connect(gain);
     gain.connect(ctx.destination);
 
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.type = 'sawtooth'; // More aggressive sound for sci-fi
+    osc.frequency.setValueAtTime(220, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+    osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.4);
 
     gain.gain.setValueAtTime(0.5, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
@@ -218,18 +221,27 @@ function App() {
 
   return (
     <div
-      className={`relative w-screen h-screen overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-black text-white transition-all duration-500 ${fontClasses[settings.fontTheme]}`}
+      className={`relative w-screen h-screen overflow-hidden bg-[#050505] text-white transition-all duration-500 ${fontClasses[settings.fontTheme] || fontClasses['Sci-Fi']}`}
     >
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_var(--color-neon-blue)_0%,_transparent_20%)] opacity-10 animate-pulse" />
+        <div className="absolute top-[20%] right-[20%] w-96 h-96 bg-[var(--color-neon-purple)] rounded-full blur-[128px] opacity-20 animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[10%] left-[10%] w-64 h-64 bg-[var(--color-neon-pink)] rounded-full blur-[96px] opacity-10 animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150" />
+      </div>
 
       {!isSettingsOpen && (
-        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 opacity-50">
-          <SettingsIcon size={20} />
-          <span className="text-sm">Press BACK for Setup</span>
+        <div className="absolute top-6 right-6 z-50 flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer" onClick={() => setIsSettingsOpen(true)}>
+          <div className="p-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+            <SettingsIcon size={20} className="text-neon-blue" />
+          </div>
+          <span className="text-sm font-rajdhani font-bold tracking-wider text-neon-blue">SETUP</span>
         </div>
       )}
 
       {!isSettingsOpen ? (
-        <div className="relative z-10 w-full h-full">
+        <div className="relative z-10 w-full h-full p-4 md:p-8">
           <TimerGrid
             timers={timers}
             activeTimerId={activeTimerId}

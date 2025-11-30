@@ -18,16 +18,16 @@ export const TimerGrid: React.FC<TimerGridProps> = ({
     onReset
 }) => {
     // Determine grid layout class based on timer count
-    let gridClass = "grid h-full w-full gap-4 p-6"; // Adjusted gap and padding to match original
+    let gridClass = "grid h-full w-full gap-6 p-4 md:p-8"; // Increased gap for cleaner look
 
     if (timers.length === 1) {
         gridClass += " grid-cols-1";
     } else if (timers.length === 2) {
-        gridClass += " grid-cols-2";
+        gridClass += " grid-cols-1 md:grid-cols-2"; // Stack on mobile
     } else if (timers.length === 3) {
-        gridClass += " grid-cols-2 grid-rows-2";
+        gridClass += " grid-cols-1 md:grid-cols-2 grid-rows-2";
     } else { // For 4 or more timers
-        gridClass += " grid-cols-2 grid-rows-2";
+        gridClass += " grid-cols-1 md:grid-cols-2 grid-rows-2";
     }
 
     return (

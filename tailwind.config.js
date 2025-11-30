@@ -5,7 +5,19 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        orbitron: ['Orbitron', 'sans-serif'],
+        rajdhani: ['Rajdhani', 'sans-serif'],
+      },
+      colors: {
+        neon: {
+          blue: 'var(--color-neon-blue)',
+          pink: 'var(--color-neon-pink)',
+          purple: 'var(--color-neon-purple)',
+        }
+      }
+    },
   },
   plugins: [],
 }
